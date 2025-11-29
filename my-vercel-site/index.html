@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>工程项目备案信息查询系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>房屋建筑工程和市政基础设施工程竣工验收备案</h1>
+        <div id="app-content">
+            <!-- 动态内容将在这里显示 -->
+        </div>
+        <div class="footer">
+            <p>备案信息查询系统 | 请使用二维码扫描访问具体项目</p>
+        </div>
+    </div>
+
+    <script>
+        // 1. 定义全部六组项目数据
+        const projects = {
+            '360826202402230813': {
+                name: '上饶市广信区旭日街道旭日社区老年活动中心',
+                address: '上饶市广信区旭日街道旭日社区',
+                scale: '地下一层、地上二层',
+                structure: '框架',
+                purpose: '公共建筑',
+                startDate: '2023-09-19',
+                completionDate: '2024-11-03',
+                licenseNumber: '36112120230093',
+                constructionLicense: '361121202309190702',
+                qualitySupervisor: '广信区工程质量监督管理站',
+                constructionUnit: '旭日街道办事处',
+                constructionManager: '邱斌',
+                surveyUnit: '建堪勘测有限公司',
+                surveyManager: '王军',
+                designUnit: '司晨设计集团有限公司', 
+                designManager: '任丽',
+                supervisionUnit: '达信建设发展有限公司',
+                supervisionManager: '黄华标',
+                builder: '江西伟泽建设工程有限公司',
+                buildManager: '杨小英'
+            },
+            'project_002': {
+                name: 'XX小区道路改造工程项目',
+                address: 'XX路至XX街道',
+                scale: '长度300米',
+                structure: '沥青混凝土',
+                purpose: '市政道路',
+                startDate: '2023-01-15',
+                completionDate: '2023-06-30',
+                licenseNumber: '20230115001',
+                constructionLicense: '20230115002',
+                qualitySupervisor: 'XX市工程质量监督站',
+                constructionUnit: 'XX市住房和城乡建设局',
+                constructionManager: '张三',
+                surveyUnit: 'XX勘察设计院',
+                surveyManager: '李四',
+                designUnit: 'XX规划设计研究院',
+                designManager: '王五',
+                supervisionUnit: 'XX工程监理有限公司',
+                supervisionManager: '赵六',
+                builder: 'XX建设工程有限公司',
+                buildManager: '钱七'
+            }
+            // 在此处继续添加 project_003 到 project_006 的其余4组数据
+            // 格式参照上面的结构
+        };
+
+        // 2. 路由控制函数
+        function router() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id'); // 获取URL中的id参数
+
+            if (projectId && projects[projectId]) {
+                showProjectDetail(projectId);
+            } else {
+                showErrorMessage();
+            }
+        }
+
+        // 3. 显示错误提示信息
+        function showErrorMessage() {
+            const content = document.getElementById('app-content');
+            content.innerHTML = `
+                <div class="error-message">
+                    <h2>⚠️ 未找到项目信息</h2>
+                    <p>请使用正确的项目二维码进行访问</p>
+                    <p>如果您是通过扫描二维码访问的，请确认二维码是否正确</p>
+                </div>
+            `;
+        }
+
+        // 4. 显示项目详情
+        function showProjectDetail(projectId) {
+            const project = projects[projectId];
+            const content = document.getElementById('app-content');
+
+            content.innerHTML = `
+                <div class="project-header">
+                    <h2>${project.name}</h2>
+                    <p><strong>备案号：</strong>${projectId}</p>
+                </div>
+                
+                <h3>基本信息</h3>
+                <table>
+                    <tr><th style="width: 30%;">项目信息</th><th>详情</th></tr>
+                    <tr><td>工程名称</td><td>${project.name}</td></tr>
+                    <tr><td>工程地址</td><td>${project.address}</td></tr>
+                    <tr><td>建设规模</td><td>${project.scale}</td></tr>
+                    <tr><td>结构类型</td><td>${project.structure}</td></tr>
+                    <tr><td>工程用途</td><td>${project.purpose}</td></tr>
+                    <tr><td>开工日期</td><td>${project.startDate}</td></tr>
+                    <tr><td>竣工日期</td><td>${project.completionDate}</td></tr>
+                    <tr><td>规划许可证号</td><td>${project.licenseNumber}</td></tr>
+                    <tr><td>施工许可证号</td><td>${project.constructionLicense}</td></tr>
+                    <tr><td>质量监督机构</td><td>${project.qualitySupervisor}</td></tr>
+                </table>
+
+                <h3>责任主体信息</h3>
+                <table>
+                    <tr><th>责任主体</th><th>单位名称</th><th>项目负责人</th></tr>
+                    <tr><td>建设单位</td><td>${project.constructionUnit}</td><td>${project.constructionManager}</td></tr>
+                    <tr><td>勘察单位</td><td>${project.surveyUnit}</td><td>${project.surveyManager}</td></tr>
+                    <tr><td>设计单位</td><td>${project.designUnit}</td><td>${project.designManager}</td></tr>
+                    <tr><td>监理单位</td><td>${project.supervisionUnit}</td><td>${project.supervisionManager}</td></tr>
+                    <tr><td>施工单位</td><td>${project.builder}</td><td>${project.buildManager}</td></tr>
+                </table>
+            `;
+        }
+
+        // 5. 页面加载时启动路由
+        document.addEventListener('DOMContentLoaded', router);
+        // 监听浏览器前进/后退事件
+        window.addEventListener('popstate', router);
+    </script>
+</body>
+</html>
